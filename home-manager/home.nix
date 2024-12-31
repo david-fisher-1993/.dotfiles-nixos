@@ -1,120 +1,87 @@
 { inputs, lib, config, pkgs, ... }: {
-  # You can import other home-manager modules here
-  imports = [
-    # If you want to use home-manager modules from other flakes (such as nix-colors):
-    # inputs.nix-colors.homeManagerModule
+    # You can import other home-manager modules here
+    imports = [
+        # If you want to use home-manager modules from other flakes (such as nix-colors):
+        # inputs.nix-colors.homeManagerModule
 
-    # You can also split up your configuration and import pieces of it here:
-    # ./nvim.nix
-  ];
-
-  nixpkgs = {
-    # You can add overlays here
-    overlays = [
-      # If you want to use overlays exported from other flakes:
-      # neovim-nightly-overlay.overlays.default
-
-      # Or define it inline, for example:
-      # (final: prev: {
-      #   hi = final.hello.overrideAttrs (oldAttrs: {
-      #     patches = [ ./change-hello-to-hi.patch ];
-      #   });
-      # })
+        # You can also split up your configuration and import pieces of it here:
+        # ./nvim.nix
     ];
-    # Configure your nixpkgs instance
-    config = {
-      # Disable if you don't want unfree packages
-      allowUnfree = true;
-      # Workaround for https://github.com/nix-community/home-manager/issues/2942
-      allowUnfreePredicate = _: true;
+
+    nixpkgs = {
+        # You can add overlays here
+        overlays = [
+            # If you want to use overlays exported from other flakes:
+            # neovim-nightly-overlay.overlays.default
+
+            # Or define it inline, for example:
+            # (final: prev: {
+            #   hi = final.hello.overrideAttrs (oldAttrs: {
+            #     patches = [ ./change-hello-to-hi.patch ];
+            #   });
+            # })
+        ];
+
+        # Configure your nixpkgs instance
+        config = {
+            # Disable if you don't want unfree packages
+            allowUnfree = true;
+            # Workaround for https://github.com/nix-community/home-manager/issues/2942
+            allowUnfreePredicate = _: true;
+        };
     };
-  };
 
-  home = {
-    username = "david";
-    homeDirectory = "/home/david";
-  };
+    home = {
+        username = "david";
+        homeDirectory = "/home/david";
+    };
 
-  # Add stuff for your user as you see fit:
-  # programs.neovim.enable = true;
+    # Add stuff for your user as you see fit:
+    # programs.neovim.enable = true;
     home.packages = with pkgs; [ 
         steam
         thunderbird
     ];
 
-  # Enable home-manager and git
-  programs.home-manager.enable = true;
-  programs.git.enable = true;
+    # Enable home-manager and git
+    programs.home-manager.enable = true;
+    programs.git.enable = true;
 
-  # Nicely reload system units when changing configs
-  systemd.user.startServices = "sd-switch";
+    wayland.windowManager.hyprland = {
+        enable = true;
 
-  home.stateVersion = "24.11"; #https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-}
+        settings = {
 
+        };
+    };
+    
+    
+#   wayland.windowManager.hyprland.settings = {
+#     "$mod" = "SUPER";
+#     bind =
+#       [
+#         "$mod, F, exec, firefox"
+#         ", Print, exec, grimblast copy area"
+#       ]
+#       ++ (
+#         # workspaces
+#         # binds $mod + [shift +] {1..9} to [move to] workspace {1..9}
+#         builtins.concatLists (builtins.genList (i:
+#             let ws = i + 1;
+#             in [
+#               "$mod, code:1${toString i}, workspace, ${toString ws}"
+#               "$mod SHIFT, code:1${toString i}, movetoworkspace, ${toString ws}"
+#             ]
+#           )
+#           9)
+#       );
+#   };
 
+    # Nicely reload system units when changing configs
+    systemd.user.startServices = "sd-switch";
 
+    home.stateVersion = "24.11"; #https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
 
-
-# { config, pkgs, ... }:
-
-# {
-#   # Specify the username for Home Manager
-#   home.username = "david"; 
-#   home.homeDirectory = "/home/david"; 
-#   # State version for Home Manager
-#   home.stateVersion = "24.11";
-
-#   programs.home-manager.enable = true;
-
-#wayland.windowManager.hyprland.enable = true;
-
-  # wayland.windowManager.hyprland.settings = {
-  #   "$mod" = "SUPER";
-  #   bind =
-  #     [
-  #       "$mod, F, exec, firefox"
-  #       ", Print, exec, grimblast copy area"
-  #     ]
-  #     ++ (
-  #       # workspaces
-  #       # binds $mod + [shift +] {1..9} to [move to] workspace {1..9}
-  #       builtins.concatLists (builtins.genList (i:
-  #           let ws = i + 1;
-  #           in [
-  #             "$mod, code:1${toString i}, workspace, ${toString ws}"
-  #             "$mod SHIFT, code:1${toString i}, movetoworkspace, ${toString ws}"
-  #           ]
-  #         )
-  #         9)
-  #     );
-  # };
-
-
-
-
-  #  imports = [
-  # #   ./configs/bashrc.nix
-  # #   ./configs/firefox.nix
-  # #   ./configs/git.nix
-  #    ./configs/hyprland.nix
-  # #   ./configs/kitty.nix
-  # #   ./configs/mako.nix
-  # #   ./configs/rofi.nix
-  # #   ./configs/steam.nix
-  # #   ./configs/waybar.nix
-  #  ];
-
-
-
-
-  #   #original
-  #   # imports =
-  #   # [ # Include the results of the hardware scan.
-  #   #   ./hardware-configuration.nix
-  #   #   ./inputs.home-manager.nixModules.default
-  #   #   #./main-user.nix
-  #   # ];
 
   # gtk = {
   #   enable = "true";
@@ -131,9 +98,4 @@
   #   "video/jpg" = [ "mpv.desktop" ];
   #   "video/*" = [ "mpv.desktop" ];
   # };
-
-  # # List packages without a config associated with them here
-  # home.packages = with pkgs; [
-  #   #gnome-tweaks
-  # ];
-#}
+}

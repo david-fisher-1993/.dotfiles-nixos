@@ -50,6 +50,19 @@
     #   "/nix/var/nix/profiles/per-user/root/channels"
     # ];
 
+    programs.hyprland = {
+        enable = true;
+        nvidiaPatches = true;
+        xwayland.enable = true;
+    };
+
+    environment.sessionVariables = {
+        WLR_NO_HARDWARE_CURSORS = "1";
+        NIXOS_OZONE_WL = "1";
+    }
+
+#    programs.hyprland.package = inputs.hyprland.packages."${pkgs.system}".hyprland;
+
     environment.systemPackages = with pkgs; [
         firefox
         dolphin
@@ -64,6 +77,8 @@
         #tidal-hifi
         #xclip
     ];
+
+
 
     programs.nm-applet.enable = true;
 
